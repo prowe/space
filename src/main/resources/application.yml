@@ -1,0 +1,15 @@
+security:
+  oauth2:
+    client:
+      clientId: 548329189765-dfgfo4od9f2tua5tjc2brm3ba5oqjv71.apps.googleusercontent.com
+      clientSecret: ux_ZtIaJpvWPXAk6au9d0Nq6
+      accessTokenUri: https://accounts.google.com/o/oauth2/token
+      userAuthorizationUri: https://accounts.google.com/o/oauth2/auth
+      tokenName: oauth_token
+      authenticationScheme: query
+      clientAuthenticationScheme: query
+      scope: profile email
+#      grant-type: authorization_code
+    resource:
+      userInfoUri: https://www.googleapis.com/oauth2/v3/userinfo
+      preferTokenInfo: false
