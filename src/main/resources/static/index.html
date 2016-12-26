@@ -7,8 +7,38 @@
     <meta name="description" content=""/>
     <meta name="viewport" content="width=device-width"/>
     <base href="/"/>
+    
+    <style type="text/css">
+    	#command-panel UL {
+    	}
+    	#command-panel FORM {
+    		display: flex;
+    	}
+    	#command-panel FORM INPUT {
+    		flex-grow: 1;
+    	}
+    </style>
 </head>
 <body>
 	<h1>Demo</h1>
+
+	<div id="app">
+		
+		<div id="command-panel">
+			<ul>
+				<li v-for="m in messages">{{m}}</li>
+			</ul>
+			<form v-on:submit.prevent v-on:submit="sendCommand">
+				<input v-model="command" />
+				<button type="submit">Send</button>
+			</form>
+		</div>
+	</div>
+	
+	<script src="https://unpkg.com/vue/dist/vue.js"></script>
+	<script src="/webjars/sockjs-client/sockjs.min.js"></script>
+	<script src="/webjars/stomp-websocket/stomp.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+	<script type="text/javascript" src="app.js"></script>
 </body>
 </html>
