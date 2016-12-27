@@ -1,3 +1,6 @@
+logging:
+  level:
+    org.springframework.messaging: TRACE
 security:
   oauth2:
     client:

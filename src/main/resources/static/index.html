@@ -26,7 +26,7 @@
 		
 		<div id="command-panel">
 			<ul>
-				<li v-for="m in messages">{{m}}</li>
+				<li v-for="m in messages"><strong>{{m.sourceId}}: </strong>{{m.message}}</li>
 			</ul>
 			<form v-on:submit.prevent v-on:submit="sendCommand">
 				<input v-model="command" />
