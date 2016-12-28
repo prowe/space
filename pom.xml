@@ -29,6 +29,16 @@
 			<artifactId>spring-security-oauth2</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>cloud.orbit</groupId>
+			<artifactId>orbit-runtime</artifactId>
+			<version>0.9.14</version>
+		</dependency>
+		<dependency>
+			<groupId>cloud.orbit</groupId>
+			<artifactId>orbit-json</artifactId>
+			<version>0.9.14</version>
+		</dependency>
+		<dependency>
             <groupId>org.webjars</groupId>
             <artifactId>webjars-locator</artifactId>
         </dependency>

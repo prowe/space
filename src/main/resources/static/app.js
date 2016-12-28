@@ -20,6 +20,7 @@ var app = new Vue({
 	methods: {
 		subscribeToUserMessages: function() {
 			console.log('subscribing to user endpoint');
+			//'/user/topic/messages'
 			window.stompClient.subscribe('/user/topic/messages', this.userMessageReceived);
 		},
 		userMessageReceived: function(response) {
