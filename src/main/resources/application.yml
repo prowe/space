@@ -1,6 +1,8 @@
 logging:
   level:
+#    cloud.orbit: DEBUG
     org.springframework.messaging: TRACE
+    
 security:
   oauth2:
     client:
