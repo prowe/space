@@ -20,10 +20,9 @@ var app = new Vue({
 	methods: {
 		subscribeToUserMessages: function() {
 			console.log('subscribing to user endpoint');
-			//'/user/topic/messages'
-			window.stompClient.subscribe('/user/topic/messages', this.userMessageReceived);
+			window.stompClient.subscribe('/user/topic/chat', this.chatMessageReceived);
 		},
-		userMessageReceived: function(response) {
+		chatMessageReceived: function(response) {
 			console.log('got user message message: ', response);
 			var message = JSON.parse(response.body);
 			this.messages.push(message);
@@ -33,7 +32,7 @@ var app = new Vue({
 				message: this.command
 			};
 			console.log('sending: ', body);
-			window.stompClient.send("/app/command", {}, JSON.stringify(body));
+			window.stompClient.send("/app/chat-messages", {}, JSON.stringify(body));
 			this.command = null;
 		}
 	}

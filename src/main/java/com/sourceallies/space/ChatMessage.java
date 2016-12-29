@@ -5,7 +5,6 @@ public class ChatMessage {
 	private String sourceId;
 	private String message;
 
-	
 	@Override
 	public String toString() {
 		return "ChatMessage [sourceId=" + sourceId + ", message=" + message + "]";

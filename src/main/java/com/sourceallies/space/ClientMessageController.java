@@ -19,18 +19,18 @@ import cloud.orbit.actors.streams.AsyncStream;
 import cloud.orbit.concurrent.Task;
 
 @Controller
-public class ChatController implements ApplicationListener<SessionSubscribeEvent>{
-	private static Logger logger = LoggerFactory.getLogger(ChatController.class);
+public class ClientMessageController implements ApplicationListener<SessionSubscribeEvent>{
+	private static Logger logger = LoggerFactory.getLogger(ClientMessageController.class);
 		
 	@Autowired
 	private SimpMessageSendingOperations messageSender;
 	
-	@MessageMapping("/command")
+	@MessageMapping("/chat-messages")
 	public void handleChatMessage(ChatMessage message, Principal principal) {
 		message.setSourceId(principal.getName());
 		logger.info("Handling chat message: {}", message);
 
-		String areaChatStreamId = Actor.getReference(SpaceshipActor.class, principal.getName())
+		String areaChatStreamId = getSpaceshipForPrincipal(principal)
 			.getAreaChatStreamId()
 			.join();
 		
@@ -42,18 +42,20 @@ public class ChatController implements ApplicationListener<SessionSubscribeEvent
 	@Override
 	public void onApplicationEvent(SessionSubscribeEvent event) {
 		logger.info("subscribing: {}", event);
-		String identity = event.getUser().getName();
 		SpaceshipObserver observer = new SpaceshipObserver() {
 			@Override
 			public Task<Void> onChatMessageReceived(ChatMessage message) {
 				logger.info("Forwarding message to user: {}", message);
-				messageSender.convertAndSendToUser(identity, "/topic/messages", message);
+				messageSender.convertAndSendToUser(event.getUser().getName(), "/topic/chat", message);
 				return Task.done();
 			}
 		};
-		
-		Actor.getReference(SpaceshipActor.class, identity)
+		getSpaceshipForPrincipal(event.getUser())
 			.setObserver(observer)
 			.join();
+	}
+	
+	private SpaceshipActor getSpaceshipForPrincipal(Principal principal) {
+		return Actor.getReference(SpaceshipActor.class, principal.getName());
 	}
 }
