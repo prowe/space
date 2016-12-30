@@ -11,6 +11,8 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 
+import com.sourceallies.space.ship.Attack;
+import com.sourceallies.space.ship.AttackResult;
 import com.sourceallies.space.ship.SpaceshipActor;
 import com.sourceallies.space.ship.SpaceshipObserver;
 
@@ -31,7 +33,7 @@ public class ClientMessageController implements ApplicationListener<SessionSubsc
 		logger.info("Handling chat message: {}", message);
 
 		String areaChatStreamId = getSpaceshipForPrincipal(principal)
-			.getAreaChatStreamId()
+			.getAreaEventStreamId()
 			.join();
 		
 		AsyncStream.getStream(ChatMessage.class, areaChatStreamId)
@@ -39,23 +41,45 @@ public class ClientMessageController implements ApplicationListener<SessionSubsc
 			.join();
 	}
 	
+	@MessageMapping("/perform-attack")
+	public void performAttack(Attack attack, Principal principal) {
+		logger.info("Handling perform attack: {}", attack);
+		getSpaceshipForPrincipal(principal)
+			.performAttack(attack)
+			.join();
+	}
+	
 	@Override
 	public void onApplicationEvent(SessionSubscribeEvent event) {
 		logger.info("subscribing: {}", event);
-		SpaceshipObserver observer = new SpaceshipObserver() {
-			@Override
-			public Task<Void> onChatMessageReceived(ChatMessage message) {
-				logger.info("Forwarding message to user: {}", message);
-				messageSender.convertAndSendToUser(event.getUser().getName(), "/topic/chat", message);
-				return Task.done();
-			}
-		};
 		getSpaceshipForPrincipal(event.getUser())
-			.setObserver(observer)
+			.setObserver(new WebsocketSpaceshipObserver(event.getUser().getName()))
 			.join();
 	}
 	
 	private SpaceshipActor getSpaceshipForPrincipal(Principal principal) {
 		return Actor.getReference(SpaceshipActor.class, principal.getName());
+	}
+	
+	private class WebsocketSpaceshipObserver implements SpaceshipObserver {
+		private final String user;
+		
+		public WebsocketSpaceshipObserver(String user) {
+			this.user = user;
+		}
+		
+		@Override
+		public Task<Void> onChatMessageReceived(ChatMessage message) {
+			logger.info("Forwarding message to user: {}", message);
+			messageSender.convertAndSendToUser(user, "/topic/chat", message);
+			return Task.done();
+		}
+
+		@Override
+		public Task<Void> onAreaAction(AttackResult result) {
+			logger.info("Forwarding message to user: {}", result);
+			messageSender.convertAndSendToUser(user, "/topic/actions", result);
+			return Task.done();
+		}
 	}
 }

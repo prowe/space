@@ -9,6 +9,11 @@
     <base href="/"/>
     
     <style type="text/css">
+    	#app {
+    		height: 20em;
+    	}
+    </style>
+    <style type="text/css">
     	@import url('chat.component.css');
     </style>
 </head>
@@ -16,6 +21,7 @@
 	<h1>Demo</h1>
 
 	<div id="app">
+		<button v-on:click="performAttack">Attack</button>
 		<chat-panel></chat-panel>
 	</div>
 	
@@ -26,8 +32,12 @@
 	
 	<script id="chat-template" type="text/x-template">
 <div class="command-panel">
-	<ul>
-		<li v-for="m in messages"><strong>{{m.sourceId}}: </strong>{{m.message}}</li>
+	<ul v-scroll-bottom>
+		<li v-for="m in messages">
+			<!-- TODO: make into components? -->
+			<span v-if="m.message"><strong>{{m.sourceId}}: </strong>{{m.message}}</span>
+			<span v-if="m.attack">{{m.attack.sourceId}} attacks {{m.attack.targetId}} for {{m.damageDelt}} damage.</span>
+		</li>
 	</ul>
 	<form v-on:submit.prevent v-on:submit="sendCommand">
 		<input v-model="command" />

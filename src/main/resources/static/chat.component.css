@@ -1,7 +1,15 @@
 @CHARSET "UTF-8";
 
+.command-panel {
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	max-height: 100%;
+	height: 100%;
+}
 .command-panel UL {
-	
+	flex-shrink: 100;
+	overflow-y: scroll;
 }
 
 .command-panel FORM {

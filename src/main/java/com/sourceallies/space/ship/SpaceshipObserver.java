@@ -10,4 +10,7 @@ public interface SpaceshipObserver extends ActorObserver{
 
 	@OneWay
 	public Task<Void> onChatMessageReceived(ChatMessage message);
+
+	@OneWay
+	public Task<Void> onAreaAction(AttackResult result);
 }
