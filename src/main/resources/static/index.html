@@ -9,36 +9,33 @@
     <base href="/"/>
     
     <style type="text/css">
-    	#command-panel UL {
-    	}
-    	#command-panel FORM {
-    		display: flex;
-    	}
-    	#command-panel FORM INPUT {
-    		flex-grow: 1;
-    	}
+    	@import url('chat.component.css');
     </style>
 </head>
 <body>
 	<h1>Demo</h1>
 
 	<div id="app">
-		
-		<div id="command-panel">
-			<ul>
-				<li v-for="m in messages"><strong>{{m.sourceId}}: </strong>{{m.message}}</li>
-			</ul>
-			<form v-on:submit.prevent v-on:submit="sendCommand">
-				<input v-model="command" />
-				<button type="submit">Send</button>
-			</form>
-		</div>
+		<chat-panel></chat-panel>
 	</div>
 	
 	<script src="https://unpkg.com/vue/dist/vue.js"></script>
 	<script src="/webjars/sockjs-client/sockjs.min.js"></script>
 	<script src="/webjars/stomp-websocket/stomp.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+	
+	<script id="chat-template" type="text/x-template">
+<div class="command-panel">
+	<ul>
+		<li v-for="m in messages"><strong>{{m.sourceId}}: </strong>{{m.message}}</li>
+	</ul>
+	<form v-on:submit.prevent v-on:submit="sendCommand">
+		<input v-model="command" />
+		<button type="submit">Send</button>
+	</form>
+</div>
+	</script>
+	<script type="text/javascript" src="chat.component.js"></script>
 	<script type="text/javascript" src="app.js"></script>
 </body>
 </html>

@@ -1,0 +1,13 @@
+@CHARSET "UTF-8";
+
+.command-panel UL {
+	
+}
+
+.command-panel FORM {
+	display: flex;
+}
+
+.command-panel FORM INPUT {
+	flex-grow: 1;
+}
